@@ -1,0 +1,109 @@
+
+<html lang="en" ng-app="reminder">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>todos</title>
+	<link rel="stylesheet" href="css/rem.css">
+	<script src='js/jquery.js'></script>
+	<script src='js/angular.js'></script>
+	<script src='js/angular-animate.js'></script>
+	<script src='js/rem.js'></script>	
+</head>
+<body  >
+	<div class="container">
+		<div class="con-box" ng-controller="mainCtrl">
+			<!-- 左边的列表 -->
+			<div class="lists">
+				<div class="l-title">
+					<div class="logo"></div>
+					<div class="title">提醒事项</div>
+					<div class="addlist" ng-click="add($index)"></div>
+				</div>
+				<ul>
+					<li class="plan">
+						<span class="p-icon"></span>
+						已计划
+						<div class="b-heng"></div>
+					</li>
+					<li class="plan" ng-class="{active: v === current}" ng-repeat="v in database" ng-click="setcurrent(v)">
+						<span class="p-color" ng-class="v.theme"></span>
+						<input type="text" palceholder="" ng-model="v.listname" >
+						<div class="p-heng"></div>
+					</li>
+					
+				</ul>
+				
+			</div>
+
+
+			<!-- 右侧的空白 -->
+			<div class="detail" ng-init="showcard=false" ng-click="showcard=false">
+                  <div class="d-view">
+                  	<div class="d-view-left">
+                  		<span class="search-icon"></span>
+                  		搜索所有的提醒
+                  	</div>
+                  	<div class="d-view-right">                  		
+                  	</div>                  	 
+                  </div>
+
+                 <div class="view-box" ng-class="current.theme">
+                    <div class="view-title" >
+                    	<span ng-bind="current.listname"></span>
+                    	<div class="xuanx"  ng-click="showcard= !showcard ;cancel($event)">选项</div>                    	
+                    </div> 
+                    <div  class="xuan-detail" ng-show="showcard" ng-click="cancel($event)">
+                    		<div class="xuan-content">
+                    			<input type="text" class="xuan-name" ng-model="current.listname" value="ng-bind" >
+                    			<p>列表颜色</p>
+                    		 <ul>
+                    	    	<li ng-repeat="v in themes" ng-click="current.theme=v" ng-class="{active:current.theme ===v}">
+                              <span class="circle" ng-class="v"></span>
+                            </li>        	    	
+                    	    </ul>
+                    	    <span class="xuan-del" ng-click="delitem(current.id);showcard=false">删除</span>
+                    	    <span class="xuan-quxiao" ng-click="showcard=false">取消</span>
+                    	    <span class="xuan-wancheng" ng-click="showcard=false">完成</span>
+                    		</div>
+                    	   
+                  	</div>	
+                  	<div class="view-main" ng-init="jiantou=false">
+                  		<div class="main-top"></div>
+                  		<div class="item-done"  >
+                  			<span class="state" ng-click="jiantou = !jiantou"  ng-class="{active:jiantou}"></span>
+                  			完成<span ng-bind="(current.todo | filter:{isDone:true}).length">0</span>项
+                  		</div>
+                      <!-- 已完成的 -->
+                        <div class="item   {{current.theme}}"  ng-repeat="v in current.todo | filter:{isDone:true}"  ng-show="jiantou" >
+                        <div class="control   {{current.theme}}"  ng-click="v.isDone = !v.isDone"  ng-class="{ch:v.isDone}"></div>
+                        <input   type="text"  ng-model='v.name'  >
+                        <div class="todo-detail ">详细信息</div>
+                        
+                      </div>
+
+                      <!-- //未完成的 -->
+                      <div class="item-done"  >
+                        <span class="state" ng-click="wei = !wei"  ng-class="{active:!wei}"></span>
+                        未完成<span ng-bind="(current.todo | filter:{isDone:false}).length">0</span>项
+                      </div>
+                  		<div class="item  {{current.theme}}"  ng-repeat="v in current.todo  | filter:{isDone:false}" ng-class="{active: v === currenttodo}" ng-click="settodo(v)" ng-hide="wei" >
+                  			<div class="control  {{current.theme}}" ng-click="v.isDone = !v.isDone"  ng-class="{unch:!v.isDone}"></div>
+                  			<input   type="text"  ng-model='v.name'  >
+                  			<div class="todo-detail ">详细信息</div>
+                  			
+                  		</div>
+                  		<div class="item" ng-click="addtodo()" >新条目</div>
+                  	</div>
+                 </div>
+
+
+
+			</div>
+			
+		</div>
+	</div>
+	
+	
+</body>
+</html>
